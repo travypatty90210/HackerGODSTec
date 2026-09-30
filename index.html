@@ -1,994 +1,840 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="nl-BE">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f7f9">
-  <meta name="description" content="KBC interface concept matching the provided mockups.">
-  <title>KBC mockup</title>
+  <meta name="description" content="KBC-inspired modern banking website interface." />
+  <title>KBC | Banking made simple</title>
   <style>
     :root {
-      --bg: #f3f4f5;
-      --panel: #f4f5f6;
+      --bg: #edf3f7;
+      --panel: #f9fbfd;
       --white: #ffffff;
-      --ink: #0f2038;
-      --blue: #1ea6ea;
-      --blue-deep: #0d6bb5;
-      --dark-blue: #0b2d5b;
-      --light-blue: #dfeeff;
-      --line: #dfe5eb;
-      --muted: #6d7d8b;
-      --soft: #edf1f4;
-      --shadow: rgba(15, 32, 56, 0.18);
-      --kbc-dark: #0b2f5d;
-      --kbc-blue: #1aa9e6;
-      --kbc-blue-2: #1d9ee5;
+      --ink: #102847;
+      --ink-soft: #42607c;
+      --line: #dfe9f1;
+      --blue: #1aa9e6;
+      --blue-deep: #0d6bb4;
+      --blue-dark: #0d2d5d;
+      --mint: #dff6ea;
+      --mint-text: #1b6d46;
+      --shadow: rgba(15, 32, 56, 0.12);
     }
 
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
+    html { scroll-behavior: smooth; }
     body {
-      background: var(--bg);
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #edf4f9 0%, #f5f8fb 100%);
       color: var(--ink);
-      font-family: "Aptos", "Segoe UI", sans-serif;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
     }
 
-    .page {
-      width: min(1400px, 100%);
+    a { text-decoration: none; color: inherit; }
+    button { font: inherit; }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 32px 20px 28px;
     }
 
-    .hero {
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(242, 247, 252, 0.7);
+      border-bottom: 1px solid rgba(179, 198, 215, 0.3);
+    }
+
+    .nav {
       display: flex;
-      justify-content: center;
       align-items: center;
-      padding: 16px 0 26px;
-    }
-
-    .phone-outer {
-      position: relative;
-      width: min(540px, 75vw);
-      aspect-ratio: 0.88;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.05);
-      display: grid;
-      place-items: center;
-      box-shadow: inset 0 0 0 22px rgba(255,255,255,0.38);
-    }
-
-    .phone-shell {
-      width: 74%;
-      height: 92%;
-      background: #0b0d10;
-      border: 10px solid #111214;
-      border-radius: 34px;
-      position: relative;
-      box-shadow: -12px 12px 28px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.09);
-      padding: 12px 12px 10px;
-    }
-
-    .phone-screen {
-      position: relative;
-      background: #f4f5f7;
-      width: 100%;
-      height: 100%;
-      border-radius: 24px;
-      overflow: hidden;
-      padding-top: 10px;
-    }
-
-    .statusbar {
-      display: flex;
       justify-content: space-between;
+      gap: 24px;
+      padding: 20px 0;
+    }
+
+    .brand {
+      display: inline-flex;
       align-items: center;
-      padding: 8px 18px 6px;
-      font-size: 12px;
-      color: #253548;
-      font-weight: 600;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.06em;
     }
 
-    .status-icons {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      font-size: 11px;
-    }
-
-    .status-icons .dot { width: 6px; height: 6px; border-radius: 50%; background: #253548; }
-    .status-icons .bar { width: 14px; height: 7px; border-radius: 4px; border: 2px solid #253548; border-top-width: 0; position: relative; }
-    .status-icons .bar::before { content: ""; position: absolute; inset: 0 2px 0 2px; border-radius: 3px; background: #253548; }
-
-    .app-header {
-      display: grid;
-      grid-template-columns: 24px 1fr 24px;
-      align-items: center;
-      padding: 8px 18px 12px;
-      color: var(--dark-blue);
-      font-weight: 700;
-    }
-
-    .back {
-      width: 22px;
-      height: 22px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      color: #3a4d66;
-    }
-
-    .title {
-      text-align: center;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .bell {
-      justify-self: end;
-      width: 18px;
-      height: 18px;
-      background: linear-gradient(135deg, #fb4a52, #d8253f);
+    .brand-mark {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #5ec6f3 0%, #1aa9e6 30%, #0d6bb4 100%);
       position: relative;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.8);
+      box-shadow: inset 0 0 0 8px rgba(255,255,255,0.18);
     }
-    .bell::before {
-      content: "";
-      position: absolute;
-      inset: 3px 5px auto 5px;
-      height: 8px;
-      border-radius: 6px 6px 8px 8px;
-      background: #fff;
-    }
-    .bell::after {
+
+    .brand-mark::before {
       content: "";
       position: absolute;
       left: 7px;
-      bottom: 2px;
-      width: 4px;
-      height: 4px;
-      background: #fff;
-      border-radius: 50%;
+      right: 7px;
+      bottom: -6px;
+      height: 16px;
+      background: var(--bg);
+      border-radius: 48% 48% 28% 28% / 54% 54% 24% 24%;
     }
 
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      border-bottom: 1px solid var(--line);
-      margin: 0 18px;
-      padding-bottom: 10px;
-      font-size: 12px;
-      color: #58708a;
-    }
-
-    .tabs .active {
-      color: var(--dark-blue);
-      font-weight: 700;
-      position: relative;
-    }
-    .tabs .active::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -12px;
-      height: 3px;
-      border-radius: 3px;
-      background: #1f9fe8;
-    }
-
-    .search-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 14px 18px 0;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      font-size: 12px;
-      color: #647d92;
-    }
-
-    .search-left {
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: #6e8194;
-    }
-
-    .search-icon {
-      width: 14px;
-      height: 14px;
-      border: 2px solid #6e8194;
-      border-radius: 50%;
-      position: relative;
-    }
-    .search-icon::after {
-      content: "";
-      position: absolute;
-      width: 7px;
-      height: 2px;
-      background: #6e8194;
-      border-radius: 2px;
-      right: -5px;
-      bottom: -1px;
-      transform: rotate(45deg);
-    }
-
-    .list {
-      padding: 8px 18px 0;
-    }
-
-    .list-header {
-      font-size: 14px;
-      color: #67809a;
-      margin: 6px 0 10px;
+      gap: 26px;
+      color: var(--ink-soft);
+      font-size: 0.94rem;
       font-weight: 600;
     }
 
-    .entry {
-      display: grid;
-      grid-template-columns: 32px 1fr auto;
-      gap: 10px;
+    .nav-links a:hover {
+      color: var(--blue-dark);
+    }
+
+    .nav-actions {
+      display: flex;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(124, 145, 163, 0.18);
+      gap: 14px;
     }
 
-    .entry:last-child {
-      border-bottom: 0;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.96rem;
+      transition: 0.2s ease;
+      cursor: pointer;
     }
 
-    .entry .avatar-mini {
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-deep) 100%);
+      color: var(--white);
+      box-shadow: 0 10px 18px rgba(26, 169, 230, 0.22);
+      border: none;
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.5);
+      border-color: #dfe7ef;
+      color: var(--ink);
+    }
+
+    .hero {
+      padding: 56px 0 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(26, 169, 230, 0.08);
+      color: var(--blue-deep);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(26,169,230,0.12);
+    }
+
+    h1 {
+      margin: 18px 0 18px;
+      font-size: clamp(2.8rem, 5vw, 5rem);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      color: var(--blue-dark);
+      max-width: 570px;
+    }
+
+    h1 .accent {
+      color: var(--blue);
+    }
+
+    .lead {
+      max-width: 560px;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .mini-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      padding-top: 8px;
+    }
+
+    .mini-stats .item {
+      min-width: 110px;
+    }
+
+    .mini-stats strong {
+      display: block;
+      font-size: 1.7rem;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--blue-dark);
+    }
+
+    .mini-stats span {
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .dash-panel {
+      position: relative;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f9fd 100%);
+      border: 1px solid rgba(145, 168, 188, 0.22);
+      border-radius: 32px;
+      box-shadow: 0 24px 48px rgba(12, 31, 54, 0.12);
+      padding: 20px 20px 14px;
+      overflow: hidden;
+    }
+
+    .dash-panel::before {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 180px;
+      height: 180px;
+      background: rgba(26, 169, 230, 0.08);
+      border-radius: 50%;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .label {
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .chip {
+      background: #dff6ea;
+      color: #1b6d46;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .balance {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 18px;
+      font-size: clamp(2.1rem, 2vw, 3rem);
+      letter-spacing: -0.06em;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .card-strip {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .small-card {
+      background: linear-gradient(180deg, #f5f9ff 0%, #edf4fa 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 14px;
+    }
+
+    .small-card strong {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .small-card span {
+      color: var(--blue-dark);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .transaction-list {
+      position: relative;
+      z-index: 1;
+      background: rgba(241, 246, 251, 0.9);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 8px 0;
+      overflow: hidden;
+    }
+
+    .t-row {
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 14px;
+      border-bottom: 1px solid rgba(168, 187, 203, 0.28);
+    }
+
+    .t-row:last-child { border-bottom: 0; }
+
+    .t-badge {
       width: 26px;
       height: 26px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #f3d77d, #e5b12d);
+      background: linear-gradient(135deg, #f6d98f, #d9a63a);
       position: relative;
       overflow: hidden;
     }
-    .entry:nth-child(2) .avatar-mini { background: linear-gradient(135deg, #f5df85, #e6b24d); }
-    .entry:nth-child(3) .avatar-mini { background: linear-gradient(135deg, #d5d4d8, #a4a3a8); }
-    .entry:nth-child(4) .avatar-mini { background: linear-gradient(135deg, #dbe9f3, #94c5ef); }
-    .entry:nth-child(5) .avatar-mini { background: linear-gradient(135deg, #d4d8db, #a0a8b4); }
 
-    .entry .avatar-mini::before {
+    .t-badge::before {
       content: "";
       position: absolute;
-      width: 120%;
-      height: 11px;
-      background: rgba(255,255,255,0.62);
+      left: -10%;
+      right: -10%;
+      top: 7px;
+      height: 10px;
       border-radius: 50%;
-      right:-10%;
-      top: 8px;
-      transform: rotate(-16deg);
+      background: rgba(255,255,255,0.68);
+      transform: rotate(-15deg);
     }
 
-    .entry .meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+    .t-row:nth-child(2) .t-badge { background: linear-gradient(135deg, #dfeaf6, #a7c7ea); }
+    .t-row:nth-child(3) .t-badge { background: linear-gradient(135deg, #dfe7ea, #a6b1bc); }
+
+    .t-meta {
       min-width: 0;
     }
 
-    .entry .meta strong {
-      font-size: 12px;
+    .t-meta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 0.9rem;
       font-weight: 700;
-      color: #1d2c3f;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .entry .meta span {
-      font-size: 10px;
-      color: #6d8290;
-    }
-
-    .amount {
-      font-size: 12px;
-      font-weight: 700;
-      color: #1d2c3f;
-      text-align: right;
-    }
-    .amount .tiny {
+    .t-meta span {
+      color: var(--ink-soft);
+      font-size: 0.72rem;
       display: block;
-      font-size: 10px;
-      color: #6d8290;
-      font-weight: 600;
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
-    .bottom-nav {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 12px 10px 8px;
-      background: rgba(255,255,255,0.8);
-      border-top: 1px solid rgba(148,160,171,0.22);
-      backdrop-filter: blur(2px);
+    .t-amount {
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-align: right;
+      white-space: nowrap;
     }
 
-    .nav-item {
+    .section {
+      padding: 32px 0 0;
+    }
+
+    .section-head {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      color: #72859a;
-      font-size: 9px;
-      font-weight: 600;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
-    .nav-item .icon {
-      width: 18px;
-      height: 18px;
-      border: 2px solid currentColor;
-      border-radius: 5px;
-      position: relative;
-      opacity: 0.9;
-    }
-    .nav-item.active { color: #1a4a7b; }
-    .nav-item.active .icon { border-color: #1a4a7b; }
-
-    .nav-item .card { border-radius: 4px; }
-    .nav-item .card::before {
-      content: "";
-      position: absolute;
-      inset: 4px 3px auto 3px;
-      height: 2px;
-      background: currentColor;
-      border-radius: 2px;
-    }
-    .nav-item .mail { border-radius: 4px; }
-    .nav-item .mail::before {
-      content: "";
-      position: absolute;
-      left: 2px;
-      right: 2px;
-      top: 2px;
-      height: 9px;
-      border: 2px solid currentColor;
-      border-top: 0;
-      transform: skewY(-12deg);
-      border-radius: 0 0 3px 3px;
-    }
-    .nav-item .status {
-      border-radius: 50%;
-      border-width: 2px;
-    }
-    .nav-item .status::before {
-      content: "";
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background: currentColor;
-      border-radius: 50%;
-      bottom: 2px;
-      right: 2px;
-    }
-
-    .logo-block {
-      padding-top: 22px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 300px;
-    }
-
-    .kbc-scene {
-      width: min(1180px, 92vw);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    .kbc-curve {
-      width: min(980px, 88vw);
-      height: 220px;
-      background: linear-gradient(180deg, #19a8e8 0%, #0c9fe2 100%);
-      border-radius: 0 0 0 0;
-      position: relative;
-      overflow: hidden;
-      border-top-left-radius: 180px 120px;
-      border-top-right-radius: 180px 120px;
-      margin-top: -26px;
-      box-shadow: inset 0 8px 0 rgba(255,255,255,0.06);
-    }
-
-    .kbc-circle {
-      width: min(210px, 26vw);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      background: var(--kbc-blue);
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.02);
-    }
-
-    .kbc-circle::before {
-      content: "";
-      position: absolute;
-      left: 6%;
-      right: 6%;
-      bottom: -16%;
-      height: 58%;
-      background: #f3f4f5;
-      border-radius: 50% 50% 32% 32% / 48% 48% 28% 28%;
-      transform: translateY(18%);
-    }
-
-    .kbc-word {
-      margin-top: -34px;
-      font-size: clamp(150px, 25vw, 560px);
-      line-height: 0.78;
-      font-weight: 900;
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
       letter-spacing: -0.06em;
-      color: #0d2d5e;
-      text-transform: uppercase;
-      text-align: center;
-      user-select: none;
-      transform: scaleY(0.92);
+      color: var(--blue-dark);
     }
 
-    .phones {
-      display: flex;
-      justify-content: center;
-      gap: clamp(18px, 2vw, 30px);
-      padding: 30px 12px 40px;
-      flex-wrap: wrap;
+    .section-head p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1rem;
     }
 
-    .mini-phone {
-      width: 260px;
-      height: 470px;
-      border-radius: 28px;
-      background: #111315;
-      padding: 10px;
-      box-shadow: 0 18px 18px rgba(17,19,21,0.12);
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
     }
 
-    .mini-screen {
-      background: #eff3f6;
-      width: 100%;
-      height: 100%;
+    .feature-card {
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(150, 170, 189, 0.24);
       border-radius: 22px;
-      overflow: hidden;
-      position: relative;
+      padding: 22px 20px;
+      box-shadow: 0 10px 18px rgba(16, 40, 71, 0.04);
+    }
+
+    .feature-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(26,169,230,0.14), rgba(13,107,180,0.18));
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      font-size: 1.4rem;
+      color: var(--blue-deep);
+      font-weight: 800;
+    }
+
+    .feature-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
       color: var(--ink);
     }
 
-    .mini-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px 6px;
-      font-size: 11px;
-      color: #3b4c63;
-      font-weight: 600;
+    .feature-card p {
+      margin: 0;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      font-size: 0.97rem;
     }
 
-    .mini-header .time {
-      letter-spacing: 0.05em;
-    }
-
-    .mini-header .statusset {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .mini-header .statusset span {
-      display: inline-block;
-      width: 11px;
-      height: 8px;
-      border-radius: 2px;
-      border: 2px solid #3b4c63;
-      border-top-width: 0;
-      position: relative;
-    }
-    .mini-header .statusset span::before {
-      content: "";
-      position: absolute;
-      inset: 0 2px 0 2px;
-      background: #3b4c63;
-      border-radius: 1px;
-    }
-
-    .mini-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 14px 0;
-      font-size: 15px;
-      color: #102847;
-      font-weight: 700;
-    }
-
-    .mini-profile {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #d7dfe6, #a7bac7);
-      border: 2px solid #9db0c1;
-    }
-
-    .mini-subhead {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 14px 8px;
-      font-size: 12px;
-      color: #51677f;
-    }
-    .mini-subhead strong { color: #1d2f4a; }
-    .mini-subhead .new {
-      background: #d9f7e4;
-      color: #1b6c45;
-      border-radius: 10px;
-      padding: 3px 7px;
-      font-size: 9px;
-      font-weight: 700;
-    }
-
-    .list-card {
-      margin: 0 14px;
-      padding: 0;
-      background: rgba(255,255,255,0.9);
-      border-radius: 8px;
-      border: 1px solid #e0e7ec;
-      overflow: hidden;
-    }
-
-    .list-card .row {
+    .two-col {
       display: grid;
-      grid-template-columns: 32px 1fr auto;
-      gap: 10px;
-      padding: 10px 12px;
-      align-items: center;
-      border-bottom: 1px solid #edf1f4;
-    }
-    .list-card .row:last-child { border-bottom: 0; }
-
-    .row .badge {
-      width: 27px;
-      height: 27px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #dde5f8, #b7c9e3);
-      position: relative;
-      overflow: hidden;
-    }
-    .row:nth-child(2) .badge { background: linear-gradient(135deg, #fef0c8, #f4d06b); }
-    .row:nth-child(3) .badge { background: linear-gradient(135deg, #dfe7ef, #a6bdd1); }
-    .row:nth-child(4) .badge { background: linear-gradient(135deg, #d7ecf9, #8fc4eb); }
-
-    .row .badge::before {
-      content: "";
-      position: absolute;
-      width: 80%;
-      height: 10px;
-      left: 10%;
-      top: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.68);
-      transform: rotate(-12deg);
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      margin-top: 28px;
     }
 
-    .row .name {
-      font-size: 11px;
-      color: #1d2f4a;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .row small {
-      display: block;
-      color: #72859a;
-      font-size: 9px;
-      margin-top: 2px;
-      font-weight: 500;
+    .report, .promo {
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(247,250,252,1));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px 22px;
+      box-shadow: 0 10px 16px rgba(15, 32, 56, 0.04);
     }
 
-    .row .money {
-      font-size: 11px;
-      color: #1d2f4a;
-      font-weight: 700;
-      text-align: right;
-    }
-
-    .mini-footer {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid rgba(152,164,176,0.25);
-      background: rgba(255,255,255,0.9);
-      padding: 10px 0 8px;
-    }
-
-    .mini-footer .item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      font-size: 8px;
-      color: #617385;
-    }
-    .mini-footer .item .small-icon {
-      width: 17px;
-      height: 17px;
-      border-radius: 4px;
-      border: 2px solid currentColor;
-      position: relative;
-    }
-    .mini-footer .item.active {
-      color: #0e4d88;
-    }
-    .mini-footer .item.active .small-icon { border-color: #0e4d88; }
-
-    .mini-screen.center-screen .banner {
-      margin: 0 14px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #d9edf9, #e7f0f5);
-      padding: 8px 10px;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .mini-screen.center-screen .card-box {
-      background: rgba(255,255,255,0.62);
-      border-radius: 10px;
-      padding: 8px 10px;
-      min-height: 74px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .mini-screen.center-screen .card-box strong { font-size: 10px; color: #475c75; }
-    .mini-screen.center-screen .card-box .amount-box { font-size: 12px; font-weight: 700; color: #1c2d42; }
-    .mini-screen.center-screen .card-box .amount-box .positive { color: #1f6f44; }
-    .mini-screen.center-screen .timeline {
-      margin: 12px 14px 0;
-      border-top: 1px solid #e3e8ec;
-      padding-top: 10px;
-    }
-    .mini-screen.center-screen .timeline-item {
+    .report-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
-      color: #5f7486;
-      padding: 5px 0;
+      margin-bottom: 18px;
     }
-    .mini-screen.center-screen .timeline-item strong { color: #1e2b37; }
 
-    .mini-screen.right-screen .topbar { padding: 12px 14px 8px; display: flex; align-items: center; justify-content: space-between; }
-    .mini-screen.right-screen .topbar .left-pill { font-size: 11px; color: #52677f; }
-    .mini-screen.right-screen .topbar .gear { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #51677f; position: relative; }
-    .mini-screen.right-screen .profile-box {
-      margin: 8px 14px 10px;
+    .report-top h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    .report-bars {
       display: flex;
-      align-items: center;
+      align-items: end;
       gap: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #e7edf2;
+      height: 160px;
+      padding-top: 12px;
     }
-    .mini-screen.right-screen .avatar-lg {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #f1d7a6, #d7b993);
-      border: 2px solid #fff;
-      box-shadow: 0 0 0 1px #dfe7ed;
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      height: 100%;
+      justify-content: end;
     }
-    .mini-screen.right-screen .profile-box strong {
+
+    .bar {
+      width: 100%;
+      max-width: 42px;
+      border-radius: 12px 12px 0 0;
+      background: linear-gradient(180deg, #6bd0f3 0%, #1aa9e6 100%);
+      min-height: 42px;
+    }
+
+    .bar.alt { background: linear-gradient(180deg, #cfe6f7 0%, #78bce9 100%); }
+    .bar-label {
+      color: var(--ink-soft);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .promo {
+      background: linear-gradient(135deg, rgba(25, 170, 230, 0.12), rgba(13, 107, 180, 0.06));
+    }
+
+    .promo .tag {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(26,169,230,0.12);
+      color: var(--blue-deep);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .promo h3 {
+      margin: 0 0 14px;
+      font-size: clamp(1.8rem, 2vw, 2.6rem);
+      letter-spacing: -0.06em;
+      line-height: 1.05;
+      color: var(--blue-dark);
+    }
+
+    .promo p {
+      margin: 0 0 20px;
+      color: var(--ink-soft);
+      line-height: 1.7;
+    }
+
+    .promo-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      margin-top: 12px;
+    }
+
+    .promo-card strong {
       display: block;
-      font-size: 13px;
-      color: #1d2f4a;
+      font-size: 1.95rem;
+      letter-spacing: -0.06em;
+      color: var(--blue-dark);
+      margin-bottom: 4px;
     }
-    .mini-screen.right-screen .profile-box span {
-      color: #687d90;
-      font-size: 11px;
+
+    .promo-card span {
+      color: var(--ink-soft);
+      font-size: 0.82rem;
     }
-    .mini-screen.right-screen .section {
-      margin: 14px 14px 0;
-      padding-top: 6px;
-    }
-    .mini-screen.right-screen .section h4 {
-      font-size: 12px;
-      color: #102847;
-      margin: 0 0 12px;
-    }
-    .mini-screen.right-screen .menu-item {
+
+    .cta {
+      margin: 44px 0 64px;
+      padding: 36px 30px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #0d2d5d 0%, #133f7a 100%);
+      color: var(--white);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid #edf1f4;
-      color: #243c56;
-      font-size: 11px;
+      gap: 18px;
+      box-shadow: 0 20px 28px rgba(13, 45, 93, 0.18);
     }
-    .mini-screen.right-screen .menu-item .left {
+
+    .cta h3 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 2vw, 2.5rem);
+      letter-spacing: -0.06em;
+    }
+
+    .cta p {
+      margin: 0;
+      color: rgba(255,255,255,0.78);
+      font-size: 0.98rem;
+    }
+
+    .site-footer {
+      padding: 0 0 36px;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .footer-inner {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
-    }
-    .mini-screen.right-screen .menu-item .icon-box {
-      width: 18px;
-      height: 18px;
-      border-radius: 4px;
-      background: #edf2f7;
-      border: 1px solid #d9e3eb;
-      position: relative;
-    }
-    .mini-screen.right-screen .menu-item .arrow {
-      color: #7e8fa2;
-      font-size: 16px;
+      gap: 18px;
+      flex-wrap: wrap;
     }
 
-    @media (max-width: 860px) {
-      .phones { gap: 18px; }
-      .mini-phone { width: min(220px, 70vw); height: 420px; }
+    @media (max-width: 980px) {
+      .hero-grid,
+      .two-col,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
+
+      .nav-links {
+        display: none;
+      }
     }
 
-    @media (max-width: 560px) {
-      .page { padding-left: 10px; padding-right: 10px; }
-      .phone-outer { width: min(420px, 90vw); }
-      .kbc-word { font-size: clamp(120px, 30vw, 280px); }
-      .mini-phone { width: min(260px, 80vw); }
+    @media (max-width: 640px) {
+      .nav {
+        gap: 12px;
+        padding: 16px 0;
+      }
+
+      .nav-actions {
+        gap: 8px;
+      }
+
+      .btn {
+        min-height: 42px;
+        padding: 0 16px;
+      }
+
+      .cta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .mini-stats {
+        gap: 16px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <section class="hero" aria-label="Banking mockup hero">
-      <div class="phone-outer">
-        <div class="phone-shell">
-          <div class="phone-screen">
-            <div class="statusbar">
-              <span>9:41</span>
-              <div class="status-icons">
-                <span class="bar"></span>
-                <span class="dot"></span>
-              </div>
+  <header class="site-header">
+    <div class="container nav">
+      <div class="brand" aria-label="KBC logo and brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>KBC</span>
+      </div>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#">Personal</a>
+        <a href="#">Business</a>
+        <a href="#">Savings</a>
+        <a href="#">Investments</a>
+        <a href="#">Support</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost" type="button">Login</button>
+        <button class="btn btn-primary" type="button">Open account</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Built for everyday confidence</div>
+          <h1>Banking that feels <span class="accent">simple</span>, clear and in control.</h1>
+          <p class="lead">Manage cards, savings, transfers and spending in one place with a faster, cleaner interface designed around the way you move money.</p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" type="button">Open account</button>
+            <button class="btn btn-ghost" type="button">See all features</button>
+          </div>
+
+          <div class="mini-stats" aria-label="business metrics">
+            <div class="item">
+              <strong>1.9M</strong>
+              <span>customers</span>
             </div>
-
-            <div class="app-header">
-              <div class="back">◀</div>
-              <div class="title">Betalen</div>
-              <div class="bell" aria-label="notifications"></div>
+            <div class="item">
+              <strong>€8.4B</strong>
+              <span>annual volume</span>
             </div>
-
-            <div class="tabs">
-              <span>Rekeningen</span>
-              <span class="active">Kaarten</span>
+            <div class="item">
+              <strong>24/7</strong>
+              <span>support</span>
             </div>
+          </div>
+        </div>
 
-            <div class="search-row">
-              <div class="search-left"><span class="search-icon"></span><span>Zoek een rekening</span></div>
-              <span>Filter</span>
+        <div class="dash-panel" aria-label="Account overview card">
+          <div class="balance-row">
+            <span class="label">Main account</span>
+            <span class="chip">+ 3.4%</span>
+          </div>
+
+          <div class="balance">€ 18,492.65</div>
+
+          <div class="card-strip">
+            <div class="small-card">
+              <strong>Available</strong>
+              <span>€ 11,640</span>
             </div>
-
-            <div class="list">
-              <div class="list-header">Zichtrekeningen</div>
-
-              <div class="entry">
-                <div class="avatar-mini"></div>
-                <div class="meta">
-                  <strong>SPRL PAYSAN BILITIS</strong>
-                  <span>€ 62.43</span>
-                </div>
-                <div class="amount">62,43 €</div>
-              </div>
-
-              <div class="entry">
-                <div class="avatar-mini"></div>
-                <div class="meta">
-                  <strong>BVBA BOER LORE</strong>
-                  <span>€ 1.597,39</span>
-                </div>
-                <div class="amount">1.597,39 €</div>
-              </div>
-
-              <div class="entry">
-                <div class="avatar-mini"></div>
-                <div class="meta">
-                  <strong>CORPOR8 DE...</strong>
-                  <span>€ 2.095.302,82</span>
-                </div>
-                <div class="amount">2.095.302,82 €</div>
-              </div>
-
-              <div class="entry">
-                <div class="avatar-mini"></div>
-                <div class="meta">
-                  <strong>CORPOR8 DEMO NV</strong>
-                  <span>€ 26.23</span>
-                </div>
-                <div class="amount">26,23 €</div>
-              </div>
+            <div class="small-card">
+              <strong>Savings</strong>
+              <span>€ 6,852</span>
             </div>
+          </div>
 
-            <div class="bottom-nav">
-              <div class="nav-item active">
-                <div class="icon card"></div>
-                <span>Betalen</span>
+          <div class="transaction-list">
+            <div class="t-row">
+              <div class="t-badge"></div>
+              <div class="t-meta">
+                <strong>Salary deposit</strong>
+                <span>Today, 09:42</span>
               </div>
-              <div class="nav-item">
-                <div class="icon mail"></div>
-                <span>Communicatie</span>
+              <div class="t-amount">+ € 2,450</div>
+            </div>
+            <div class="t-row">
+              <div class="t-badge"></div>
+              <div class="t-meta">
+                <strong>Groceries</strong>
+                <span>20 Sep</span>
               </div>
-              <div class="nav-item">
-                <div class="icon status"></div>
-                <span>Meer</span>
+              <div class="t-amount">- € 188</div>
+            </div>
+            <div class="t-row">
+              <div class="t-badge"></div>
+              <div class="t-meta">
+                <strong>Rent payment</strong>
+                <span>18 Sep</span>
               </div>
+              <div class="t-amount">- € 840</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="logo-block" aria-label="KBC brand block">
-      <div class="kbc-scene">
-        <div class="kbc-circle" aria-hidden="true"></div>
-        <div class="kbc-curve" aria-hidden="true"></div>
-        <div class="kbc-word">KBC</div>
+    <section class="section" aria-label="Features">
+      <div class="section-head">
+        <h2>Everything in one place.</h2>
+        <p>Clearer tools for smarter everyday banking.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">↗</div>
+          <h3>Fast transfers</h3>
+          <p>Send money in seconds with a progress-led flow that keeps your payment details clear and reliable.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">◌</div>
+          <h3>Smart cards</h3>
+          <p>Track real-time spending, freeze cards instantly and manage limits without friction or confusion.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">✓</div>
+          <h3>Budget insight</h3>
+          <p>Get a live picture of your cash flow and identify patterns before they turn into problems.</p>
+        </article>
       </div>
     </section>
 
-    <section class="phones" aria-label="Three KBC app screens">
-      <div class="mini-phone">
-        <div class="mini-screen">
-          <div class="mini-header">
-            <span class="time">9:41</span>
-            <div class="statusset"><span></span><span></span></div>
+    <section class="two-col" aria-label="Insights and account growth">
+      <div class="report">
+        <div class="report-top">
+          <h3>Monthly overview</h3>
+          <span class="chip">+ 18.2%</span>
+        </div>
+
+        <div class="report-bars" aria-label="Bar chart">
+          <div class="bar-col">
+            <div class="bar" style="height: 44%"></div>
+            <div class="bar-label">Jan</div>
           </div>
-
-          <div class="mini-title"><span class="mini-profile"></span><span>Mijn KBC</span></div>
-
-          <div class="mini-subhead"><strong>Rekeningen</strong><span class="new">Nieuw</span></div>
-
-          <div class="list-card">
-            <div class="row">
-              <div class="badge"></div>
-              <div class="name">Simons - Peeters<small>BE12 3456 7890 1234</small></div>
-              <div class="money">€ 813,85</div>
-            </div>
-            <div class="row">
-              <div class="badge"></div>
-              <div class="name">Persoonlijke rekening<small>BE12 3456 7890 1234</small></div>
-              <div class="money">€ 1.042,85</div>
-            </div>
-            <div class="row">
-              <div class="badge"></div>
-              <div class="name">Anne Simons<small>BE12 3456 7890 1234</small></div>
-              <div class="money">€ 5.813,85</div>
-            </div>
-            <div class="row">
-              <div class="badge"></div>
-              <div class="name">PayPal<small>—</small></div>
-              <div class="money">€ 0,00</div>
-            </div>
+          <div class="bar-col">
+            <div class="bar alt" style="height: 58%"></div>
+            <div class="bar-label">Feb</div>
           </div>
-
-          <div class="mini-footer">
-            <div class="item active"><div class="small-icon"></div><span>Start</span></div>
-            <div class="item"><div class="small-icon"></div><span>Mijn KBC</span></div>
-            <div class="item"><div class="small-icon"></div><span>Beleggen</span></div>
-            <div class="item"><div class="small-icon"></div><span>Aanbod</span></div>
+          <div class="bar-col">
+            <div class="bar" style="height: 68%"></div>
+            <div class="bar-label">Mar</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar alt" style="height: 77%"></div>
+            <div class="bar-label">Apr</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar" style="height: 88%"></div>
+            <div class="bar-label">May</div>
+          </div>
+          <div class="bar-col">
+            <div class="bar alt" style="height: 96%"></div>
+            <div class="bar-label">Jun</div>
           </div>
         </div>
       </div>
 
-      <div class="mini-phone">
-        <div class="mini-screen center-screen">
-          <div class="mini-header">
-            <span class="time">9:41</span>
-            <div class="statusset"><span></span><span></span></div>
-          </div>
+      <aside class="promo">
+        <div class="tag">New</div>
+        <h3>More value from every euro.</h3>
+        <p>Earn better returns on your cash while keeping full visibility over your daily spending and recurring payments.</p>
 
-          <div class="mini-title" style="padding-top: 2px; padding-bottom: 8px;"><span class="mini-profile"></span><span>Anne</span></div>
-
-          <div class="banner">
-            <div class="card-box">
-              <strong>Simons - Peeters</strong>
-              <span class="amount-box">€ 813,05</span>
-            </div>
-            <div class="card-box">
-              <strong>Persoonlijke rek.</strong>
-              <span class="amount-box"><span class="positive">€ 1.042,85</span></span>
-            </div>
-            <div class="card-box">
-              <strong>Simons - Peet</strong>
-              <span class="amount-box">€ 7.239,23</span>
-            </div>
-          </div>
-
-          <div class="timeline">
-            <div class="timeline-item"><span>10/10</span><strong>iTunes.com/bill</strong><span>−9,99 €</span></div>
-            <div class="timeline-item"><span>01/10</span><strong>TicketmasterBE</strong><span>−240,00 €</span></div>
-            <div class="timeline-item"><span>11/09</span><strong>Domiciliëring</strong><span>73,95 €</span></div>
-          </div>
-
-          <div class="mini-footer">
-            <div class="item active"><div class="small-icon"></div><span>Start</span></div>
-            <div class="item"><div class="small-icon"></div><span>Mijn KBC</span></div>
-            <div class="item"><div class="small-icon"></div><span>Beleggen</span></div>
-            <div class="item"><div class="small-icon"></div><span>Aanbod</span></div>
-          </div>
+        <div class="promo-card">
+          <strong>3.4%</strong>
+          <span>Average annual growth across your savings goals.</span>
         </div>
-      </div>
-
-      <div class="mini-phone">
-        <div class="mini-screen right-screen">
-          <div class="topbar">
-            <div class="left-pill">Instellingen</div>
-            <div class="gear" aria-label="instellingen"></div>
-          </div>
-
-          <div class="profile-box">
-            <div class="avatar-lg"></div>
-            <div>
-              <strong>Anne Simons</strong>
-              <span>Afmelden</span>
-            </div>
-          </div>
-
-          <div class="section">
-            <h4>Profiel</h4>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Naam en foto personaliseren</span></div>
-              <div class="arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Persoonlijke gegevens</span></div>
-              <div class="arrow">›</div>
-            </div>
-          </div>
-
-          <div class="section">
-            <h4>App-instellingen</h4>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Favorieten op je startscherm</span></div>
-              <div class="arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Volgorde rekeningen op Mijn KBC</span></div>
-              <div class="arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Meldingen</span></div>
-              <div class="arrow">›</div>
-            </div>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Diensten van Kate</span></div>
-              <div class="arrow">›</div>
-            </div>
-          </div>
-
-          <div class="section">
-            <h4>Betalen</h4>
-            <div class="menu-item">
-              <div class="left"><div class="icon-box"></div><span>Begunstigden</span></div>
-              <div class="arrow">›</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </aside>
     </section>
-  </div>
+
+    <section class="cta" aria-label="Call to action section">
+      <div>
+        <h3>Ready for a calmer banking experience?</h3>
+        <p>Join thousands of customers who value clarity, speed and control.</p>
+      </div>
+      <button class="btn btn-primary" type="button">Start now</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 KBC-inspired demo concept</span>
+      <span>Privacy · Terms · Security</span>
+    </div>
+  </footer>
 </body>
 </html>
