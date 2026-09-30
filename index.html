@@ -42,6 +42,8 @@
     .topbar { height: 68px; padding: 0 clamp(18px, 4vw, 52px); display: flex; justify-content: space-between; align-items: center; background: var(--white); border-bottom: 1px solid var(--line); }
     .crumb { color: var(--muted); font-size: 12px; }
     .top-actions { display: flex; align-items: center; gap: 14px; }
+    .settings-link { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; color: var(--blue-dark); background: white; font-size: 11px; text-decoration: none; }
+    .settings-link:hover { border-color: #8db8dc; background: #f8fbfe; }
     .icon-button { width: 36px; height: 36px; border: 1px solid var(--line); background: white; border-radius: 50%; color: var(--blue-dark); }
     .avatar { width: 34px; height: 34px; display: grid; place-items: center; background: #dbeaf7; border-radius: 50%; color: var(--blue-dark); font-size: 12px; font-weight: 700; }
     .content { width: min(1180px, 100%); margin: 0 auto; padding: 31px clamp(18px, 4vw, 52px) 54px; }
@@ -49,11 +51,6 @@
     h1 { font-size: clamp(24px, 3vw, 31px); line-height: 1.15; letter-spacing: 0; margin: 0 0 7px; font-weight: 680; }
     .welcome p { margin: 0; color: var(--muted); font-size: 13px; }
     .date { font-size: 11px; color: var(--muted); white-space: nowrap; padding-top: 5px; }
-    .profile-strip { background: #eaf3fb; border: 1px solid #d8e8f6; border-radius: var(--radius); display: grid; grid-template-columns: minmax(180px, 1.25fr) repeat(5, minmax(95px, 1fr)); align-items: center; gap: 12px; padding: 13px 16px; margin-bottom: 20px; }
-    .profile-title { font-size: 12px; font-weight: 700; color: var(--blue-dark); }
-    .profile-title span { display: block; font-size: 10px; font-weight: 400; color: #52718f; margin-top: 4px; }
-    .field label { display: block; font-size: 9px; color: #52687d; margin-bottom: 4px; }
-    .field select { width: 100%; border: 1px solid #cbdbea; border-radius: 5px; background: white; padding: 7px 6px; color: var(--ink); font-size: 11px; }
     .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 15px; }
     .panel { min-width: 0; background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 19px; }
     .balance { grid-column: span 7; color: white; background: var(--blue); border-color: var(--blue); position: relative; overflow: hidden; min-height: 190px; }
@@ -127,8 +124,6 @@
       .brand-copy, .nav-label, .nav-text, .sidebar-foot { display: none; }
       .nav { width: 100%; }
       .nav button { justify-content: center; padding: 12px 4px; }
-      .profile-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .profile-title { grid-column: 1 / -1; }
     }
     @media (max-width: 650px) {
       .shell { display: block; padding-bottom: 62px; }
@@ -142,8 +137,9 @@
       .content { padding: 23px 15px 28px; }
       .welcome { margin-bottom: 17px; }
       .date { display: none; }
-      .profile-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; gap: 9px; }
-      .profile-title { grid-column: 1 / -1; }
+      .top-actions { gap: 8px; }
+      .settings-link { width: 34px; height: 34px; justify-content: center; padding: 0; }
+      .settings-label { display: none; }
       .grid { gap: 10px; }
       .panel { padding: 15px; }
       .balance, .spending, .categories, .insight, .transactions, .quick-actions { grid-column: 1 / -1; }
@@ -153,7 +149,7 @@
       .footer-note { padding: 0 12px; line-height: 1.5; }
     }
     @media (prefers-reduced-motion: no-preference) {
-      .panel, .profile-strip { animation: arrive .35s ease-out both; }
+      .panel { animation: arrive .35s ease-out both; }
       .grid > :nth-child(2) { animation-delay: .04s; }
       .grid > :nth-child(3) { animation-delay: .08s; }
       @keyframes arrive { from { opacity: .5; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -179,20 +175,12 @@
     <main>
       <header class="topbar">
         <span class="crumb">Mijn KBC <span aria-hidden="true">/</span> Overzicht</span>
-        <div class="top-actions"><button class="icon-button" aria-label="Meldingen" title="Meldingen">♧</button><div class="avatar" aria-label="Profiel Noor">NV</div></div>
+        <div class="top-actions"><a class="settings-link" id="settings-link" href="settings.html" aria-label="Test een ervaring aanpassen" title="Test een ervaring aanpassen"><span aria-hidden="true">⚙</span><span class="settings-label">Ervaring aanpassen</span></a><button class="icon-button" aria-label="Meldingen" title="Meldingen">♧</button><div class="avatar" aria-label="Profiel Noor">NV</div></div>
       </header>
       <div class="content">
         <section class="welcome">
           <div><h1 id="greeting">Goedemorgen, Noor</h1><p id="welcome-copy">Je geld, helder in beeld. Fijn dat je er bent.</p></div>
           <span class="date">DINSDAG 30 SEPTEMBER</span>
-        </section>
-        <section class="profile-strip" aria-label="Demo-profiel aanpassen">
-          <div class="profile-title">Test een ervaring<span>Demo-profiel, geen echte klantdata</span></div>
-          <div class="field"><label for="age">Levensfase</label><select id="age"><option value="young">Jongvolwassene</option><option value="middle" selected>Volwassene</option><option value="senior">60+</option></select></div>
-          <div class="field"><label for="spending-style">Uitgaven</label><select id="spending-style"><option value="low">Rustig</option><option value="balanced" selected>In balans</option><option value="high">Veel beweging</option></select></div>
-          <div class="field"><label for="family-mode">Rekening</label><select id="family-mode"><option value="solo" selected>Persoonlijk</option><option value="family">Gezamenlijk gezin</option></select></div>
-          <div class="field"><label for="investor">Beleggen</label><select id="investor"><option value="no" selected>Geen beleggingen</option><option value="yes">Belegger</option></select></div>
-          <div class="field"><label for="session">App-gebruik</label><select id="session"><option value="short" selected>Vlot gevonden</option><option value="long">Lang zoeken</option></select></div>
         </section>
         <div class="grid" id="home-view">
           <section class="panel balance">
@@ -245,13 +233,21 @@
   </div>
   <div id="overlay-root"></div>
   <script>
-    const fields = {
-      age: document.querySelector('#age'),
-      spending: document.querySelector('#spending-style'),
-      family: document.querySelector('#family-mode'),
-      investor: document.querySelector('#investor'),
-      session: document.querySelector('#session')
+    const allowedValues = {
+      age: ['young', 'middle', 'senior'],
+      spending: ['low', 'balanced', 'high'],
+      family: ['solo', 'family'],
+      investor: ['no', 'yes'],
+      session: ['short', 'long']
     };
+    const defaults = { age: 'middle', spending: 'balanced', family: 'solo', investor: 'no', session: 'short' };
+    const params = new URLSearchParams(window.location.search);
+    const profile = Object.fromEntries(Object.entries(allowedValues).map(([key, values]) => {
+      const value = params.get(key);
+      return [key, values.includes(value) ? value : defaults[key]];
+    }));
+    const settingsParams = new URLSearchParams(profile);
+    document.querySelector('#settings-link').href = `settings.html?${settingsParams}`;
     const overlayRoot = document.querySelector('#overlay-root');
     let toastTimer;
 
@@ -266,7 +262,7 @@
     }
 
     function updateProfile() {
-      const { age, spending, family, investor, session } = Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, field.value]));
+      const { age, spending, family, investor, session } = profile;
       const longSession = session === 'long';
       document.querySelector('#greeting').textContent = age === 'young' ? 'Hey Noor, klaar voor vandaag?' : age === 'senior' ? 'Welkom terug, Noor' : 'Goedemorgen, Noor';
       document.querySelector('#welcome-copy').textContent = longSession ? 'Neem rustig je tijd. Hulp is dichtbij als je die nodig hebt.' : age === 'young' ? 'Jouw geld, jouw plannen. Wat wil je vandaag doen?' : age === 'senior' ? 'Je overzicht staat klaar, met hulp dichtbij wanneer jij die nodig hebt.' : 'Je geld, helder in beeld. Fijn dat je er bent.';
@@ -312,9 +308,6 @@
       document.querySelector('#transfer-amount').focus();
     }
 
-    document.addEventListener('change', event => {
-      if (Object.values(fields).includes(event.target)) updateProfile();
-    });
     document.addEventListener('click', event => {
       const viewButton = event.target.closest('[data-view]');
       if (viewButton) {

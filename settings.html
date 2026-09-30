@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fa">
+  <meta name="description" content="Pas het demo-profiel voor KBC Kompas aan.">
+  <title>Test een ervaring | KBC Kompas</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172738;
+      --muted: #637384;
+      --blue: #0057a8;
+      --blue-dark: #003d78;
+      --line: #dce4eb;
+      --canvas: #f4f7fa;
+      --white: #fff;
+      --radius: 8px;
+      font-family: "Aptos", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--canvas); color: var(--ink); }
+    button, select { font: inherit; }
+    .topbar { height: 68px; padding: 0 clamp(18px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; background: var(--white); border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--blue-dark); font-size: 18px; font-weight: 750; }
+    .brand-mark { width: 31px; height: 31px; display: grid; place-items: center; background: var(--blue); border-radius: 50%; color: white; font-size: 13px; }
+    .brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+    .back-link { color: var(--blue); font-size: 12px; font-weight: 650; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    main { width: min(900px, 100%); margin: 0 auto; padding: 42px 22px 60px; }
+    .eyebrow { margin: 0 0 8px; color: var(--blue); font-size: 10px; font-weight: 750; letter-spacing: 1.2px; text-transform: uppercase; }
+    h1 { margin: 0; font-size: 30px; line-height: 1.2; font-weight: 700; }
+    .intro { margin: 9px 0 27px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .form-panel { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+    .form-heading { padding: 19px 22px 16px; border-bottom: 1px solid var(--line); }
+    .form-heading h2 { margin: 0; font-size: 14px; }
+    .form-heading p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    form { padding: 5px 22px 0; }
+    .setting { display: grid; grid-template-columns: minmax(170px, 1fr) minmax(210px, 1.1fr); align-items: center; gap: 24px; padding: 18px 0; border-bottom: 1px solid #edf1f4; }
+    .setting label { font-size: 12px; font-weight: 650; }
+    .setting small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 400; line-height: 1.45; }
+    select { width: 100%; padding: 10px 11px; border: 1px solid #ccd8e2; border-radius: 5px; background: white; color: var(--ink); font-size: 12px; }
+    select:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #76b7e8; outline-offset: 2px; }
+    .demo-note { display: flex; gap: 10px; align-items: flex-start; margin: 17px 0 20px; padding: 12px; background: #edf5fb; border-radius: 6px; color: #385974; font-size: 10px; line-height: 1.55; }
+    .demo-note strong { display: block; margin-bottom: 2px; color: var(--blue-dark); font-size: 11px; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 9px; padding: 16px 22px; background: #f9fbfc; border-top: 1px solid var(--line); }
+    .button { display: inline-flex; justify-content: center; align-items: center; min-height: 37px; padding: 0 14px; border-radius: 5px; font-size: 11px; font-weight: 650; text-decoration: none; }
+    .button.secondary { border: 1px solid var(--line); background: white; color: var(--ink); }
+    .button.primary { border: 1px solid var(--blue); background: var(--blue); color: white; }
+    .button.primary:hover { background: var(--blue-dark); }
+    .footnote { margin-top: 15px; color: #718293; font-size: 10px; text-align: center; }
+    @media (max-width: 560px) {
+      .topbar { height: 58px; padding: 0 15px; }
+      main { padding: 28px 14px 42px; }
+      h1 { font-size: 25px; }
+      .setting { grid-template-columns: 1fr; gap: 9px; padding: 14px 0; }
+      form { padding: 3px 16px 0; }
+      .form-heading { padding: 16px; }
+      .form-actions { padding: 13px 16px; }
+      .form-actions .button { flex: 1; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      main { animation: enter .3s ease-out both; }
+      @keyframes enter { from { opacity: .6; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">K</span><span>KBC Kompas<small>digitaal bankieren</small></span></div>
+    <a class="back-link" href="index.html">← Naar overzicht</a>
+  </header>
+  <main>
+    <p class="eyebrow">Demo-instellingen</p>
+    <h1>Test een ervaring</h1>
+    <p class="intro">Pas het fictieve profiel aan en bekijk meteen hoe het overzicht verandert. Deze instellingen zijn alleen bedoeld om de conceptdemo te testen.</p>
+    <section class="form-panel" aria-labelledby="settings-title">
+      <div class="form-heading"><h2 id="settings-title">Kies een klantprofiel</h2><p>Verander één of meer opties en bekijk daarna het overzicht.</p></div>
+      <form id="profile-form" action="index.html" method="get">
+        <div class="setting">
+          <label for="age">Levensfase<small>De interface blijft door iedereen aanpasbaar.</small></label>
+          <select id="age" name="age"><option value="young">Jongvolwassene</option><option value="middle">Volwassene</option><option value="senior">60+</option></select>
+        </div>
+        <div class="setting">
+          <label for="spending">Uitgavenpatroon<small>Verander de maandelijkse uitgaveninzichten.</small></label>
+          <select id="spending" name="spending"><option value="low">Rustig</option><option value="balanced">In balans</option><option value="high">Veel beweging</option></select>
+        </div>
+        <div class="setting">
+          <label for="family">Rekening<small>Bekijk een persoonlijk of gezamenlijk gezinsoverzicht.</small></label>
+          <select id="family" name="family"><option value="solo">Persoonlijk</option><option value="family">Gezamenlijk gezin</option></select>
+        </div>
+        <div class="setting">
+          <label for="investor">Beleggen<small>Toon of verberg de demo-beleggingsinformatie.</small></label>
+          <select id="investor" name="investor"><option value="no">Geen beleggingen</option><option value="yes">Belegger</option></select>
+        </div>
+        <div class="setting">
+          <label for="session">App-gebruik<small>Simuleer vlot gebruik of moeite om iets te vinden.</small></label>
+          <select id="session" name="session"><option value="short">Vlot gevonden</option><option value="long">Lang zoeken</option></select>
+        </div>
+        <div class="demo-note"><span aria-hidden="true">ⓘ</span><span><strong>Fictieve gegevens</strong>Er worden geen echte bankgegevens gebruikt. Je keuzes staan tijdelijk in de adresbalk van deze demo zodat ze met het overzicht mee kunnen.</span></div>
+        <div class="form-actions"><a class="button secondary" href="index.html">Annuleren</a><button class="button primary" type="submit">Toon ervaring</button></div>
+      </form>
+    </section>
+    <p class="footnote">Conceptdemo · geen echte rekening, betaling of persoonlijk financieel advies</p>
+  </main>
+  <script>
+    const allowedValues = {
+      age: ['young', 'middle', 'senior'],
+      spending: ['low', 'balanced', 'high'],
+      family: ['solo', 'family'],
+      investor: ['no', 'yes'],
+      session: ['short', 'long']
+    };
+    const params = new URLSearchParams(window.location.search);
+    const returnParams = new URLSearchParams();
+    for (const [name, values] of Object.entries(allowedValues)) {
+      const value = params.get(name);
+      const select = document.querySelector(`#${name}`);
+      if (values.includes(value)) select.value = value;
+      returnParams.set(name, select.value);
+    }
+    document.querySelectorAll('a[href="index.html"]').forEach(link => {
+      link.href = `index.html?${returnParams}`;
+    });
+  </script>
+</body>
+</html>

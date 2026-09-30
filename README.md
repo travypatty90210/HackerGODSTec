@@ -3,7 +3,7 @@
 
 Een interactieve visie op persoonlijker digitaal bankieren: een helder dagelijks overzicht dat zich aanpast aan wat de klant zelf nodig heeft, zonder de controle over geldzaken of persoonsgegevens uit handen te nemen.
 
-Open `index.html` in een browser om de conceptdemo te proberen. De profielkeuzes simuleren levensfase, uitgavenpatroon, gezin, beleggen en app-frictie. De gegevens zijn fictief; overschrijvingen worden niet uitgevoerd.
+Open `index.html` in een browser om de conceptdemo te proberen. Gebruik **Ervaring aanpassen** om het demo-profiel op een aparte pagina te wijzigen. De profielkeuzes simuleren levensfase, uitgavenpatroon, gezin, beleggen en app-frictie. De fictieve demo-keuzes staan in de URL om ze tussen pagina's door te geven; deel die URL dus niet als je keuzes privé wilt houden. Overschrijvingen worden niet uitgevoerd.
 
 ### Productvisie
 
