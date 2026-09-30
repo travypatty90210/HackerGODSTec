@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fa">
+  <meta name="description" content="KBC Kompas: een interactieve visie op persoonlijker digitaal bankieren.">
+  <title>KBC Kompas | Bankieren op jouw maat</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172738;
+      --muted: #637384;
+      --blue: #0057a8;
+      --blue-dark: #003d78;
+      --sky: #e7f2fc;
+      --red: #e3293b;
+      --green: #176b50;
+      --line: #dce4eb;
+      --canvas: #f4f7fa;
+      --white: #fff;
+      --radius: 8px;
+      font-family: "Aptos", "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); min-height: 100vh; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+    .sidebar { background: var(--white); border-right: 1px solid var(--line); padding: 25px 16px; display: flex; flex-direction: column; gap: 30px; }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 10px; color: var(--blue-dark); font-size: 20px; font-weight: 750; letter-spacing: 0; }
+    .brand-mark { width: 31px; height: 31px; display: grid; place-items: center; background: var(--blue); border-radius: 50%; color: #fff; font-weight: 800; font-size: 13px; }
+    .brand small { display: block; font-size: 10px; text-transform: uppercase; color: var(--muted); letter-spacing: 1.1px; margin-top: 2px; }
+    .nav-label { color: #8391a0; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 0 12px; margin-bottom: 7px; }
+    .nav { display: grid; gap: 4px; }
+    .nav button { border: 0; color: #536578; background: transparent; text-align: left; padding: 11px 12px; border-radius: 6px; display: flex; align-items: center; gap: 12px; font-size: 13px; }
+    .nav button:hover, .nav button.active { background: #eaf3fb; color: var(--blue-dark); }
+    .nav-icon { width: 18px; text-align: center; font-size: 16px; }
+    .sidebar-foot { margin-top: auto; border-top: 1px solid var(--line); padding: 17px 10px 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .sidebar-foot strong { display: block; color: var(--ink); font-size: 12px; margin-bottom: 3px; }
+    main { min-width: 0; }
+    .topbar { height: 68px; padding: 0 clamp(18px, 4vw, 52px); display: flex; justify-content: space-between; align-items: center; background: var(--white); border-bottom: 1px solid var(--line); }
+    .crumb { color: var(--muted); font-size: 12px; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .icon-button { width: 36px; height: 36px; border: 1px solid var(--line); background: white; border-radius: 50%; color: var(--blue-dark); }
+    .avatar { width: 34px; height: 34px; display: grid; place-items: center; background: #dbeaf7; border-radius: 50%; color: var(--blue-dark); font-size: 12px; font-weight: 700; }
+    .content { width: min(1180px, 100%); margin: 0 auto; padding: 31px clamp(18px, 4vw, 52px) 54px; }
+    .welcome { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 23px; }
+    h1 { font-size: clamp(24px, 3vw, 31px); line-height: 1.15; letter-spacing: 0; margin: 0 0 7px; font-weight: 680; }
+    .welcome p { margin: 0; color: var(--muted); font-size: 13px; }
+    .date { font-size: 11px; color: var(--muted); white-space: nowrap; padding-top: 5px; }
+    .profile-strip { background: #eaf3fb; border: 1px solid #d8e8f6; border-radius: var(--radius); display: grid; grid-template-columns: minmax(180px, 1.25fr) repeat(5, minmax(95px, 1fr)); align-items: center; gap: 12px; padding: 13px 16px; margin-bottom: 20px; }
+    .profile-title { font-size: 12px; font-weight: 700; color: var(--blue-dark); }
+    .profile-title span { display: block; font-size: 10px; font-weight: 400; color: #52718f; margin-top: 4px; }
+    .field label { display: block; font-size: 9px; color: #52687d; margin-bottom: 4px; }
+    .field select { width: 100%; border: 1px solid #cbdbea; border-radius: 5px; background: white; padding: 7px 6px; color: var(--ink); font-size: 11px; }
+    .grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 15px; }
+    .panel { min-width: 0; background: white; border: 1px solid var(--line); border-radius: var(--radius); padding: 19px; }
+    .balance { grid-column: span 7; color: white; background: var(--blue); border-color: var(--blue); position: relative; overflow: hidden; min-height: 190px; }
+    .balance:after { content: ""; position: absolute; width: 220px; height: 220px; border: 1px solid #ffffff25; border-radius: 50%; right: -50px; top: -112px; box-shadow: 0 0 0 25px #ffffff0a, 0 0 0 53px #ffffff08; }
+    .balance-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; color: #dbeeff; font-size: 11px; position: relative; z-index: 1; }
+    .account-tag { border: 1px solid #ffffff5c; border-radius: 20px; padding: 5px 9px; font-size: 10px; }
+    .amount { margin: 24px 0 6px; font-size: 33px; line-height: 1; letter-spacing: 0; font-weight: 700; position: relative; z-index: 1; }
+    .account-sub { color: #dbeeff; font-size: 11px; position: relative; z-index: 1; }
+    .balance-bottom { display: flex; align-items: center; gap: 9px; margin-top: 19px; position: relative; z-index: 1; }
+    .primary-light, .primary { border: 0; border-radius: 5px; padding: 9px 13px; font-size: 11px; font-weight: 650; }
+    .primary-light { color: var(--blue-dark); background: white; }
+    .secondary-light { border: 1px solid #ffffff70; color: white; background: transparent; border-radius: 5px; padding: 8px 12px; font-size: 11px; }
+    .spending { grid-column: span 5; }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 9px; margin-bottom: 16px; }
+    .panel-heading h2 { font-size: 14px; margin: 0; font-weight: 680; }
+    .panel-heading p { font-size: 10px; color: var(--muted); margin: 4px 0 0; }
+    .text-button { border: 0; padding: 2px 0; background: transparent; color: var(--blue); font-size: 10px; font-weight: 650; white-space: nowrap; }
+    .total-spent { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 12px; }
+    .total-spent strong { font-size: 24px; letter-spacing: 0; }
+    .positive { color: var(--green); font-size: 10px; }
+    .bars { height: 56px; display: flex; align-items: end; gap: 7px; border-bottom: 1px solid var(--line); padding: 0 2px; }
+    .bar { flex: 1; min-width: 8px; background: #a9cce9; border-radius: 3px 3px 0 0; }
+    .bar.current { background: var(--blue); }
+    .bar-labels { display: flex; justify-content: space-between; color: #8391a0; font-size: 8px; padding-top: 5px; }
+    .categories { grid-column: span 7; }
+    .category-list { display: grid; gap: 12px; }
+    .category { display: grid; grid-template-columns: 28px minmax(85px, 1fr) 1.25fr 62px; align-items: center; gap: 9px; font-size: 10px; }
+    .category-icon { height: 27px; width: 27px; display: grid; place-items: center; background: #f0f5f9; border-radius: 6px; }
+    .category-name { color: #35495d; }
+    .track { height: 6px; background: #eaf0f4; border-radius: 9px; overflow: hidden; }
+    .fill { height: 100%; background: #3b8bc9; border-radius: 9px; }
+    .category-value { color: var(--muted); text-align: right; }
+    .insight { grid-column: span 5; background: #f4f9fd; }
+    .insight-mark { font-size: 20px; }
+    .insight h2 { font-size: 14px; margin: 0 0 8px; }
+    .insight p { font-size: 11px; color: #536578; line-height: 1.55; margin: 0 0 13px; }
+    .primary { color: white; background: var(--blue); }
+    .primary:hover { background: var(--blue-dark); }
+    .transactions { grid-column: span 7; }
+    .transaction-list { display: grid; }
+    .transaction { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid #edf1f4; font-size: 10px; }
+    .transaction:first-child { border-top: 0; }
+    .tx-main { display: flex; gap: 9px; align-items: center; }
+    .tx-icon { width: 29px; height: 29px; border-radius: 50%; display: grid; place-items: center; background: #f1f5f8; }
+    .tx-name { font-weight: 650; font-size: 11px; }
+    .tx-date { color: var(--muted); font-size: 9px; margin-top: 3px; }
+    .tx-amount { font-size: 11px; font-weight: 650; align-self: center; }
+    .quick-actions { grid-column: span 5; }
+    .action-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .action { min-height: 64px; border: 1px solid var(--line); background: white; border-radius: 6px; padding: 11px; text-align: left; color: var(--ink); }
+    .action:hover { border-color: #8db8dc; background: #f8fbfe; }
+    .action span { display: block; font-size: 16px; margin-bottom: 6px; }
+    .action strong { font-size: 10px; font-weight: 650; }
+    .hidden { display: none !important; }
+    .helper { display: flex; gap: 9px; align-items: flex-start; padding: 12px; margin-top: 14px; border-radius: 6px; background: #fff7e7; color: #735718; font-size: 10px; line-height: 1.5; }
+    .toast { position: fixed; right: 20px; bottom: 20px; background: #172738; color: white; border-radius: 6px; padding: 12px 16px; font-size: 12px; box-shadow: 0 8px 28px #17273830; z-index: 5; max-width: min(360px, calc(100% - 40px)); }
+    .modal-backdrop { position: fixed; inset: 0; background: #17273866; display: grid; place-items: center; padding: 18px; z-index: 4; }
+    .modal { background: white; width: min(420px, 100%); border-radius: var(--radius); padding: 22px; box-shadow: 0 20px 60px #17273830; }
+    .modal h2 { font-size: 18px; margin: 0 0 6px; }
+    .modal p { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .modal label { display: block; font-size: 11px; font-weight: 650; margin: 15px 0 5px; }
+    .modal input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 5px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 19px; }
+    .quiet { border: 1px solid var(--line); background: white; border-radius: 5px; padding: 8px 12px; font-size: 11px; }
+    .privacy-note { font-size: 9px !important; background: #f2f7fa; padding: 9px; border-radius: 5px; }
+    .footer-note { color: #7a8997; font-size: 9px; text-align: center; margin-top: 18px; }
+    @media (max-width: 900px) {
+      .shell { grid-template-columns: 72px minmax(0, 1fr); }
+      .sidebar { padding: 21px 9px; align-items: center; }
+      .brand { padding: 0; }
+      .brand-copy, .nav-label, .nav-text, .sidebar-foot { display: none; }
+      .nav { width: 100%; }
+      .nav button { justify-content: center; padding: 12px 4px; }
+      .profile-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .profile-title { grid-column: 1 / -1; }
+    }
+    @media (max-width: 650px) {
+      .shell { display: block; padding-bottom: 62px; }
+      .sidebar { position: fixed; z-index: 3; left: 0; right: 0; bottom: 0; height: 59px; padding: 5px 10px; border-right: 0; border-top: 1px solid var(--line); display: block; }
+      .brand, .nav-label, .sidebar-foot { display: none; }
+      .nav { display: flex; justify-content: space-around; height: 100%; }
+      .nav button { flex: 1; display: grid; justify-items: center; align-content: center; gap: 1px; padding: 4px 1px; font-size: 8px; }
+      .nav-text { display: block; font-size: 8px; }
+      .nav-icon { font-size: 15px; }
+      .topbar { height: 56px; padding: 0 16px; }
+      .content { padding: 23px 15px 28px; }
+      .welcome { margin-bottom: 17px; }
+      .date { display: none; }
+      .profile-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; gap: 9px; }
+      .profile-title { grid-column: 1 / -1; }
+      .grid { gap: 10px; }
+      .panel { padding: 15px; }
+      .balance, .spending, .categories, .insight, .transactions, .quick-actions { grid-column: 1 / -1; }
+      .balance { min-height: 178px; }
+      .spending { grid-row: auto; }
+      .category { grid-template-columns: 27px minmax(75px, .9fr) 1fr 55px; gap: 7px; }
+      .footer-note { padding: 0 12px; line-height: 1.5; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .panel, .profile-strip { animation: arrive .35s ease-out both; }
+      .grid > :nth-child(2) { animation-delay: .04s; }
+      .grid > :nth-child(3) { animation-delay: .08s; }
+      @keyframes arrive { from { opacity: .5; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Hoofdnavigatie">
+      <div class="brand"><span class="brand-mark">K</span><span class="brand-copy">KBC Kompas<small>digitaal bankieren</small></span></div>
+      <div>
+        <div class="nav-label">Mijn bank</div>
+        <nav class="nav">
+          <button class="active" data-view="home"><span class="nav-icon">⌂</span><span class="nav-text">Overzicht</span></button>
+          <button data-view="spending"><span class="nav-icon">◷</span><span class="nav-text">Uitgaven</span></button>
+          <button data-view="invest"><span class="nav-icon">↗</span><span class="nav-text">Beleggen</span></button>
+          <button data-view="family"><span class="nav-icon">♧</span><span class="nav-text">Gezin</span></button>
+          <button data-view="help"><span class="nav-icon">?</span><span class="nav-text">Hulp</span></button>
+        </nav>
+      </div>
+      <div class="sidebar-foot"><strong>Goedemorgen, Noor</strong>Je bank, afgestemd op jou.<br>Jij bepaalt wat je ziet.</div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <span class="crumb">Mijn KBC <span aria-hidden="true">/</span> Overzicht</span>
+        <div class="top-actions"><button class="icon-button" aria-label="Meldingen" title="Meldingen">♧</button><div class="avatar" aria-label="Profiel Noor">NV</div></div>
+      </header>
+      <div class="content">
+        <section class="welcome">
+          <div><h1 id="greeting">Goedemorgen, Noor</h1><p id="welcome-copy">Je geld, helder in beeld. Fijn dat je er bent.</p></div>
+          <span class="date">DINSDAG 30 SEPTEMBER</span>
+        </section>
+        <section class="profile-strip" aria-label="Demo-profiel aanpassen">
+          <div class="profile-title">Test een ervaring<span>Demo-profiel, geen echte klantdata</span></div>
+          <div class="field"><label for="age">Levensfase</label><select id="age"><option value="young">Jongvolwassene</option><option value="middle" selected>Volwassene</option><option value="senior">60+</option></select></div>
+          <div class="field"><label for="spending-style">Uitgaven</label><select id="spending-style"><option value="low">Rustig</option><option value="balanced" selected>In balans</option><option value="high">Veel beweging</option></select></div>
+          <div class="field"><label for="family-mode">Rekening</label><select id="family-mode"><option value="solo" selected>Persoonlijk</option><option value="family">Gezamenlijk gezin</option></select></div>
+          <div class="field"><label for="investor">Beleggen</label><select id="investor"><option value="no" selected>Geen beleggingen</option><option value="yes">Belegger</option></select></div>
+          <div class="field"><label for="session">App-gebruik</label><select id="session"><option value="short" selected>Vlot gevonden</option><option value="long">Lang zoeken</option></select></div>
+        </section>
+        <div class="grid" id="home-view">
+          <section class="panel balance">
+            <div class="balance-top"><span>Zichtrekening ·· 4821</span><span class="account-tag">Privé</span></div>
+            <div class="amount">€ 4.820,60</div>
+            <div class="account-sub">Beschikbaar saldo</div>
+            <div class="balance-bottom"><button class="primary-light" data-action="transfer">Geld overschrijven</button><button class="secondary-light" data-action="accounts">Mijn rekeningen</button></div>
+          </section>
+          <section class="panel spending" id="spending-panel">
+            <div class="panel-heading"><div><h2>Uitgaven deze maand</h2><p>September · bijgewerkt vandaag</p></div><button class="text-button" data-view="spending">Details →</button></div>
+            <div class="total-spent"><strong id="spend-total">€ 1.284</strong><span class="positive" id="spend-change">↓ 8% vs. vorige maand</span></div>
+            <div class="bars" aria-label="Uitgaven over de voorbije zes maanden"><i class="bar" style="height:48%"></i><i class="bar" style="height:71%"></i><i class="bar" style="height:58%"></i><i class="bar" style="height:83%"></i><i class="bar" style="height:65%"></i><i class="bar current" style="height:52%"></i></div>
+            <div class="bar-labels"><span>apr</span><span>mei</span><span>jun</span><span>jul</span><span>aug</span><span>sep</span></div>
+          </section>
+          <section class="panel categories" id="categories-panel">
+            <div class="panel-heading"><div><h2>Waar gaat je geld naartoe?</h2><p>Deze maand · 4 categorieën</p></div><button class="text-button" data-view="spending">Alle uitgaven →</button></div>
+            <div class="category-list">
+              <div class="category"><span class="category-icon">⌂</span><span class="category-name">Wonen</span><span class="track"><span class="fill" style="width:76%"></span></span><span class="category-value">€ 680</span></div>
+              <div class="category"><span class="category-icon">▤</span><span class="category-name">Boodschappen</span><span class="track"><span class="fill" style="width:49%"></span></span><span class="category-value">€ 312</span></div>
+              <div class="category"><span class="category-icon">♧</span><span class="category-name">Vervoer</span><span class="track"><span class="fill" style="width:32%"></span></span><span class="category-value">€ 186</span></div>
+              <div class="category"><span class="category-icon">♡</span><span class="category-name">Ontspanning</span><span class="track"><span class="fill" style="width:21%"></span></span><span class="category-value">€ 106</span></div>
+            </div>
+          </section>
+          <section class="panel insight" id="insight-panel">
+            <div class="panel-heading"><div><h2>Een inzicht voor jou</h2><p>Op basis van je zichtbare uitgaven</p></div><span class="insight-mark">✳</span></div>
+            <p id="insight-copy">Je vaste kosten zijn deze maand stabiel. Je gaf 8% minder uit aan ontspanning dan vorige maand.</p>
+            <button class="text-button" data-action="insights">Bekijk je maandoverzicht →</button>
+          </section>
+          <section class="panel transactions">
+            <div class="panel-heading"><div><h2>Recente verrichtingen</h2><p>Je laatste activiteit</p></div><button class="text-button" data-view="spending">Alles bekijken →</button></div>
+            <div class="transaction-list">
+              <div class="transaction"><div class="tx-main"><span class="tx-icon">▤</span><div><div class="tx-name">Delhaize</div><div class="tx-date">Vandaag · Boodschappen</div></div></div><span class="tx-amount">− € 42,80</span></div>
+              <div class="transaction"><div class="tx-main"><span class="tx-icon">⌂</span><div><div class="tx-name">Huur appartement</div><div class="tx-date">Gisteren · Wonen</div></div></div><span class="tx-amount">− € 890,00</span></div>
+              <div class="transaction"><div class="tx-main"><span class="tx-icon">↙</span><div><div class="tx-name">Loon</div><div class="tx-date">26 sep · Inkomsten</div></div></div><span class="tx-amount" style="color:var(--green)">+ € 2.640,00</span></div>
+            </div>
+          </section>
+          <section class="panel quick-actions" id="actions-panel">
+            <div class="panel-heading"><div><h2>Handig voor jou</h2><p>Je meest gebruikte acties</p></div><button class="text-button" data-action="customize">Aanpassen</button></div>
+            <div class="action-list">
+              <button class="action" data-action="transfer"><span>↗</span><strong>Overschrijven</strong></button>
+              <button class="action" data-action="cards"><span>▣</span><strong>Mijn kaarten</strong></button>
+              <button class="action" data-action="standing"><span>↻</span><strong>Doorlopende opdrachten</strong></button>
+              <button class="action" data-action="help"><span>?</span><strong>Contact & hulp</strong></button>
+            </div>
+          </section>
+        </div>
+        <div class="footer-note">Interactieve conceptdemo · uitsluitend fictieve gegevens · geen echte betaling of financieel advies</div>
+      </div>
+    </main>
+  </div>
+  <div id="overlay-root"></div>
+  <script>
+    const fields = {
+      age: document.querySelector('#age'),
+      spending: document.querySelector('#spending-style'),
+      family: document.querySelector('#family-mode'),
+      investor: document.querySelector('#investor'),
+      session: document.querySelector('#session')
+    };
+    const overlayRoot = document.querySelector('#overlay-root');
+    let toastTimer;
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.setAttribute('role', 'status');
+      toast.textContent = message;
+      overlayRoot.replaceChildren(toast);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { overlayRoot.innerHTML = ''; }, 3200);
+    }
+
+    function updateProfile() {
+      const { age, spending, family, investor, session } = Object.fromEntries(Object.entries(fields).map(([key, field]) => [key, field.value]));
+      const longSession = session === 'long';
+      document.querySelector('#greeting').textContent = age === 'young' ? 'Hey Noor, klaar voor vandaag?' : age === 'senior' ? 'Welkom terug, Noor' : 'Goedemorgen, Noor';
+      document.querySelector('#welcome-copy').textContent = longSession ? 'Neem rustig je tijd. Hulp is dichtbij als je die nodig hebt.' : age === 'young' ? 'Jouw geld, jouw plannen. Wat wil je vandaag doen?' : age === 'senior' ? 'Je overzicht staat klaar, met hulp dichtbij wanneer jij die nodig hebt.' : 'Je geld, helder in beeld. Fijn dat je er bent.';
+      document.querySelector('#insight-copy').textContent = spending === 'low'
+        ? 'Je uitgaven blijven mooi binnen je maandritme. Bekijk je categorieën en plan rustig vooruit.'
+        : spending === 'high'
+          ? 'Je rekening was deze maand actiever dan anders. Bekijk je recente overschrijvingen en hou het overzicht.'
+          : 'Je vaste kosten zijn deze maand stabiel. Je gaf 8% minder uit aan ontspanning dan vorige maand.';
+      document.querySelector('#spend-total').textContent = spending === 'low' ? '€ 864' : spending === 'high' ? '€ 2.184' : '€ 1.284';
+      document.querySelector('#spend-change').textContent = spending === 'high' ? '↑ 12% vs. vorige maand' : '↓ 8% vs. vorige maand';
+      document.querySelector('#spend-change').classList.toggle('positive', spending !== 'high');
+      document.querySelector('#spending-panel').classList.toggle('hidden', longSession);
+      document.querySelector('#categories-panel').classList.toggle('hidden', longSession);
+      document.querySelector('#actions-panel').classList.toggle('hidden', longSession);
+      document.querySelector('#insight-panel').querySelector('h2').textContent = longSession ? 'Hulp nodig?' : investor === 'yes' ? 'Beleggen op jouw maat' : family === 'family' ? 'Samen grip op geld' : 'Een inzicht voor jou';
+      if (longSession) {
+        document.querySelector('#insight-copy').textContent = 'We hebben de belangrijkste keuzes voor je vereenvoudigd. Chat met onze demo-assistent of neem contact op met KBC.';
+        document.querySelector('#insight-panel .text-button').textContent = 'Open de hulpassistent →';
+        document.querySelector('#insight-panel .text-button').dataset.action = 'help';
+      } else if (investor === 'yes') {
+        document.querySelector('#insight-copy').textContent = 'Je beleggingsportefeuille en het marktnieuws staan klaar. Bekijk informatie op jouw tempo.';
+        document.querySelector('#insight-panel .text-button').textContent = 'Naar beleggen →';
+        document.querySelector('#insight-panel .text-button').dataset.action = 'invest';
+      } else if (family === 'family') {
+        document.querySelector('#insight-copy').textContent = 'Je gedeelde rekening heeft deze maand € 214 over voor jullie gezamenlijke plannen.';
+        document.querySelector('#insight-panel .text-button').textContent = 'Open gezinsoverzicht →';
+        document.querySelector('#insight-panel .text-button').dataset.action = 'family';
+      } else {
+        document.querySelector('#insight-copy').textContent = spending === 'low'
+          ? 'Je uitgaven blijven mooi binnen je maandritme. Bekijk je categorieën en plan rustig vooruit.'
+          : spending === 'high'
+            ? 'Je rekening was deze maand actiever dan anders. Bekijk je recente overschrijvingen en hou het overzicht.'
+            : 'Je vaste kosten zijn deze maand stabiel. Je gaf 8% minder uit aan ontspanning dan vorige maand.';
+        document.querySelector('#insight-panel .text-button').textContent = 'Bekijk je maandoverzicht →';
+        document.querySelector('#insight-panel .text-button').dataset.action = 'insights';
+      }
+      document.querySelector('[data-view="invest"]').classList.toggle('hidden', investor !== 'yes');
+      document.querySelector('[data-view="family"]').classList.toggle('hidden', family !== 'family');
+    }
+
+    function openTransfer() {
+      overlayRoot.innerHTML = `<div class="modal-backdrop" data-dismiss="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="transfer-title"><h2 id="transfer-title">Overschrijving simuleren</h2><p>Deze demo voert geen betaling uit en bewaart niets.</p><label for="to-name">Begunstigde</label><input id="to-name" value="Eigen spaarrekening" autocomplete="off"><label for="transfer-amount">Bedrag</label><input id="transfer-amount" type="number" min="0.01" step="0.01" placeholder="0,00"><p class="privacy-note">In een echte bankapp volgt hier een beveiligde bevestiging, met sterke klantauthenticatie. Controleer altijd begunstigde en bedrag.</p><div class="modal-actions"><button class="quiet" data-close>Annuleren</button><button class="primary" data-confirm>Verder</button></div></section></div>`;
+      document.querySelector('#transfer-amount').focus();
+    }
+
+    document.addEventListener('change', event => {
+      if (Object.values(fields).includes(event.target)) updateProfile();
+    });
+    document.addEventListener('click', event => {
+      const viewButton = event.target.closest('[data-view]');
+      if (viewButton) {
+        document.querySelectorAll('.nav button').forEach(button => button.classList.toggle('active', button === viewButton));
+        const view = viewButton.dataset.view;
+        if (view === 'home') showToast('Je overzicht staat klaar.');
+        else if (view === 'spending') showToast('Uitgavenoverzicht geopend in deze demo.');
+        else if (view === 'invest') showToast('Demo: beleggen met informatie, geen persoonlijk advies.');
+        else if (view === 'family') showToast('Demo: gedeeld gezinsoverzicht. Toegang beheer je zelf.');
+        else if (view === 'help') showToast('Demo-assistent: waarmee kan ik je helpen?');
+        return;
+      }
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      if (action === 'transfer') openTransfer();
+      else if (action === 'help') showToast('Demo-assistent: kies zelf of je chat, belt of een afspraak maakt.');
+      else if (action === 'customize') showToast('In een echte app beheer je personalisatie en toestemming bij Privacy.');
+      else if (action) showToast('Deze functie wordt in de conceptdemo gesimuleerd.');
+      if (event.target.closest('[data-close]') || event.target.matches('[data-dismiss]')) overlayRoot.innerHTML = '';
+      if (event.target.closest('[data-confirm]')) {
+        const amount = Number(document.querySelector('#transfer-amount').value);
+        const recipient = document.querySelector('#to-name').value.trim();
+        if (!recipient || !Number.isFinite(amount) || amount <= 0) {
+          showToast('Vul een begunstigde en een geldig bedrag in.');
+        } else {
+          showToast(`Demo: overschrijving van € ${amount.toFixed(2)} naar ${recipient} klaar voor bevestiging. Niet uitgevoerd.`);
+        }
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') overlayRoot.innerHTML = '';
+    });
+    updateProfile();
+  </script>
+</body>
+</html>
